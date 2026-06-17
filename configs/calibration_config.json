@@ -1,0 +1,10 @@
+{
+  "color_camera_index": 0,
+  "frame_width": 1280,
+  "frame_height": 720,
+  "chessboard_cols": 11,
+  "chessboard_rows": 8,
+  "square_size_mm": 15.0,
+  "image_dir": "data/calibration/images",
+  "output_dir": "data/calibration"
+}

@@ -1,0 +1,11 @@
+{
+  "classes": [
+    {
+      "id": 0,
+      "name": "plate",
+      "model": "models/plate/plate.stl",
+      "aabb": "models/plate/aabb_corners.json",
+      "unit": "mm"
+    }
+  ]
+}

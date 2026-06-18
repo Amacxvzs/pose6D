@@ -1,5 +1,6 @@
 @echo off
 cd /d D:\1.sjcl\pose6d
+D:\PY\python.exe scripts\analyze_pose_quality.py --split all --class-name plate --detection-name detections_pose --no-vis
 D:\PY\python.exe scripts\make_occlusion_plan.py --split all --detection-name detections_pose
 D:\PY\python.exe scripts\extract_stage2_occluded_clouds.py --split all --class-name plate --detection-name detections_pose --depth-window-mm 80 --min-points 80
 D:\PY\python.exe scripts\estimate_initial_poses.py --split all --class-name plate --cloud-name object_clouds_stage2 --output-name initial_poses_stage2 --no-vis

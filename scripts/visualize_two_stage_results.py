@@ -63,14 +63,14 @@ def make_contact_sheets(vis_dir: Path, output_dir: Path, cols: int = 4, rows: in
     return paths
 
 
-def run(split: str) -> None:
-    pose_rows = read_csv(PROJECT_ROOT / "outputs" / "two_stage_poses" / split / "two_stage_poses.csv")
+def run(split: str, pose_name: str, output_name: str) -> None:
+    pose_rows = read_csv(PROJECT_ROOT / "outputs" / pose_name / split / "two_stage_poses.csv")
     skip_rows = read_csv(PROJECT_ROOT / "outputs" / "occlusion_plan" / split / "skip_or_recapture.csv")
     detections = load_detections(split)
     _, radius_mm, top_center = load_object_geometry(PROJECT_ROOT / "models" / "plate" / "aabb_corners.json")
     k, dist = load_intrinsic(PROJECT_ROOT / "data" / "calibration" / "camera_intrinsic_crop_720.json")
     rgb_dir = PROJECT_ROOT / "data" / "raw" / "rgb" / split / "plate"
-    output_dir = PROJECT_ROOT / "outputs" / "two_stage_review" / split
+    output_dir = PROJECT_ROOT / "outputs" / output_name / split
     vis_dir = output_dir / "vis"
     vis_dir.mkdir(parents=True, exist_ok=True)
 
@@ -95,6 +95,9 @@ def run(split: str) -> None:
         for row in poses_by_image.get(image_name, []):
             source = row["two_stage_source"]
             color = (0, 255, 0) if source == "stage1_front_or_clear" else (255, 255, 0)
+            valid_field = row.get("plane_pose_valid", row.get("two_stage_valid", "0"))
+            if str(valid_field) != "1":
+                color = (0, 0, 255)
             stage1_count += int(source == "stage1_front_or_clear")
             stage2_count += int(source == "stage2_after_front_mask")
             transform = transform_from_pose(row)
@@ -143,8 +146,10 @@ def run(split: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Visualize final two-stage pose outputs and skipped detections.")
     parser.add_argument("--split", choices=("train", "val", "test"), default="test")
+    parser.add_argument("--pose-name", default="two_stage_poses")
+    parser.add_argument("--output-name", default="two_stage_review")
     args = parser.parse_args()
-    run(args.split)
+    run(args.split, args.pose_name, args.output_name)
 
 
 if __name__ == "__main__":

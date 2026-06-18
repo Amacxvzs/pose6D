@@ -6,4 +6,5 @@ D:\PY\python.exe scripts\extract_stage2_occluded_clouds.py --split all --class-n
 D:\PY\python.exe scripts\estimate_initial_poses.py --split all --class-name plate --cloud-name object_clouds_stage2 --output-name initial_poses_stage2 --no-vis
 D:\PY\python.exe scripts\refine_poses_icp.py --split all --class-name plate --init-name initial_poses_stage2 --cloud-name object_clouds_stage2 --output-name icp_poses_stage2 --voxel-mm 3 --max-corr-mm 25 --icp-iters 40 --surface full --no-vis
 D:\PY\python.exe scripts\merge_two_stage_results.py
+D:\PY\python.exe scripts\constrain_pose_to_table_plane.py --split all --class-name plate --max-angle-deg 20
 pause

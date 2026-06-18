@@ -16,11 +16,12 @@ def main() -> None:
     parser.add_argument("--imgsz", type=int, default=640)
     parser.add_argument("--name", default="plate_yolov9t")
     parser.add_argument("--model", default="yolov9t.pt")
+    parser.add_argument("--data", default=str(PROJECT_ROOT / "configs" / "plate_yolo.yaml"))
     args = parser.parse_args()
 
     model = YOLO(args.model)
     model.train(
-        data=str(PROJECT_ROOT / "configs" / "plate_yolo.yaml"),
+        data=args.data,
         epochs=args.epochs,
         imgsz=args.imgsz,
         batch=args.batch,

@@ -126,11 +126,18 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Simple OpenCV YOLO bbox annotator for plate images.")
     parser.add_argument("--split", default="train", choices=["train", "val", "test"])
     parser.add_argument("--class-name", default="plate")
+    parser.add_argument("--image-dir", type=Path, default=None, help="Override image directory.")
+    parser.add_argument("--label-dir", type=Path, default=None, help="Override label output directory.")
     parser.add_argument("--start", type=int, default=0)
     args = parser.parse_args()
-    root = Path("data")
-    image_dir = root / "raw" / "rgb" / args.split / args.class_name
-    label_dir = root / "labels" / "yolo" / args.split / args.class_name
+    if args.image_dir is not None:
+        image_dir = args.image_dir
+    else:
+        image_dir = Path("data") / "raw" / "rgb" / args.split / args.class_name
+    if args.label_dir is not None:
+        label_dir = args.label_dir
+    else:
+        label_dir = Path("data") / "labels" / "yolo" / args.split / args.class_name
     Annotator(image_dir, label_dir, args.start).run()
 
 

@@ -36,8 +36,7 @@ def box_passes_filter(xyxy: list[float], width: int, height: int, min_size: floa
     return True
 
 
-def run(split: str, class_name: str, conf: float, iou: float, imgsz: int, save_vis: bool, output_name: str, min_size: float, max_size: float, min_aspect: float, max_aspect: float, border: float) -> None:
-    model_path = PROJECT_ROOT / "runs" / "detect" / "plate_yolov9t" / "weights" / "best.pt"
+def run(split: str, class_name: str, conf: float, iou: float, imgsz: int, save_vis: bool, output_name: str, min_size: float, max_size: float, min_aspect: float, max_aspect: float, border: float, model_path: Path) -> None:
     image_dir = PROJECT_ROOT / "data" / "raw" / "rgb" / split / class_name
     output_dir = PROJECT_ROOT / "outputs" / output_name / split
     vis_dir = output_dir / "vis"
@@ -142,10 +141,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Run trained YOLOv9 detector and save reusable detection outputs.")
     parser.add_argument("--split", choices=("train", "val", "test", "all"), default="all")
     parser.add_argument("--class-name", default="plate")
-    parser.add_argument("--conf", type=float, default=0.25)
+    parser.add_argument("--conf", type=float, default=0.70)
     parser.add_argument("--iou", type=float, default=0.7)
     parser.add_argument("--imgsz", type=int, default=640)
     parser.add_argument("--output-name", default="detections")
+    parser.add_argument(
+        "--model",
+        type=Path,
+        default=PROJECT_ROOT / "runs" / "detect" / "plate_yolov9t_pseudo_20260617" / "weights" / "best.pt",
+    )
     parser.add_argument("--min-size", type=float, default=30.0)
     parser.add_argument("--max-size", type=float, default=170.0)
     parser.add_argument("--min-aspect", type=float, default=0.55)
@@ -169,6 +173,7 @@ def main() -> None:
             min_aspect=args.min_aspect,
             max_aspect=args.max_aspect,
             border=args.border,
+            model_path=args.model,
         )
 
 
